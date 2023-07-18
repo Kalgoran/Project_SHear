@@ -10,22 +10,17 @@ public class CameraMovements : MonoBehaviour
 
     private Vector3 velocity;
 
-    Renderer r1;
-    Renderer r2;
 
     // Start is called before the first frame update
     void Start()
     {
-        r1 = P1.GetComponent<Renderer>();
-        r2 = P2.GetComponent<Renderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        //1/4 = z/vision
         Vector3 CameraPos = new Vector3 ((P1.transform.position.x + P2.transform.position.x) / 2f, 
-            (P1.transform.position.y + P2.transform.position.y) / 2f, CamZ());
+            (P1.transform.position.y + P2.transform.position.y) / 2f, transform.position.z);
  
         transform.position = Vector3.SmoothDamp(transform.position, CameraPos, ref velocity, smoothTime); //smoothen the movement
     }
@@ -35,7 +30,6 @@ public class CameraMovements : MonoBehaviour
     {
         float z = -(Mathf.Abs(P1.transform.position.x-P2.transform.position.x)) / 2f;
 
-        print(z);
         if (z<=-10 && z >= -25)
         {
             
