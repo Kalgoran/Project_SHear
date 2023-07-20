@@ -12,12 +12,13 @@ public class PlayerController2D : MonoBehaviour
     private float jumpForce = 10f;
     [SerializeField]
     private float gravity = 4f;
+    [SerializeField]
+    private float dashForce = 20f;
+
     private Rigidbody2D rb;
     private CapsuleCollider2D cl;
 
-    private float v0 = 0;
     private float vel;
-    private float inputRL;
 
     private void Awake()
     {
@@ -35,19 +36,23 @@ public class PlayerController2D : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //- s'accroupir
+        
         //- dash
-        //- (courir)
 
         float vx;
         float vy;
 
         bool a = DetectGround();
+
+        //jump
         if (a && Input.GetButtonDown("Jump"))
         {
-            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // add vertical force without mass
-            v0 = rb.velocity.x;
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // add vertical force
         }
+
+
+        //s'accroupir
+        transform.localScale = new Vector3(1, 1f-Mathf.Abs(Input.GetAxis("Vertical"))/2f, 1);
 
         //faster fall 
         vy = rb.velocity.y;
@@ -65,7 +70,7 @@ public class PlayerController2D : MonoBehaviour
         {
             if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.5)
             {
-                vx = Mathf.SmoothDamp(rb.velocity.x, Input.GetAxis("Horizontal") * speed, ref vel, 0.6f);
+                vx = Mathf.SmoothDamp(rb.velocity.x, Input.GetAxis("Horizontal") * speed, ref vel, 0.5f);
             } else
             {
                 vx = Input.GetAxis("Horizontal") * speed; //faster stop
@@ -73,12 +78,29 @@ public class PlayerController2D : MonoBehaviour
         }
         else
         {
-            vx = rb.velocity.x + 0.007f * Input.GetAxis("Horizontal") * speed;  //restrict air movements
+            vx = rb.velocity.x + 0.004f * Input.GetAxis("Horizontal") * speed;  //restrict air movements
         }
         vx = Mathf.Clamp(vx, -speed, speed);
         rb.velocity = new Vector2(vx, vy);
+
+        //dash
+        if (Input.GetButtonDown("Fire3"))
+        {
+            print(Vector2.right * GetDirection() * dashForce);
+            rb.AddForce(Vector2.right * GetDirection() * dashForce, ForceMode2D.Impulse); // add horizontal force 
+        }
     }
 
+    float GetDirection()
+    {
+        if (Input.GetAxis("Horizontal") != 0)
+        {
+            return Input.GetAxis("Horizontal") / Mathf.Abs(Input.GetAxis("Horizontal"));
+        } else
+        {
+            return 0;
+        }
+    }
 
     bool DetectGround()
     {
