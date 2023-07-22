@@ -360,6 +360,8 @@ GameObject:
   - component: {fileID: 717862195}
   - component: {fileID: 717862194}
   - component: {fileID: 717862193}
+  - component: {fileID: 717862197}
+  - component: {fileID: 717862196}
   m_Layer: 0
   m_Name: Capsule
   m_TagString: Untagged
@@ -512,6 +514,44 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &717862196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717862187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a01771fe7143fbe4fba626bf74874a8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SimpleAttackButton: Fire1
+  SpecialAttackButton: Fire2
+  BlockButton: Block
+  HorizontalAxis: Horizontal
+  VerticalAxis: Vertical
+  NSimpleAttack: {fileID: 2712742386655291160, guid: de3ec6e2c399db14090189dae26a4acc, type: 3}
+  FSimpleAttack: {fileID: 0}
+  DSimpleAttack: {fileID: 0}
+  NSpecialAttack: {fileID: 0}
+  FSpecialAttack: {fileID: 0}
+  DSpecialAttack: {fileID: 0}
+  attackOffset: 5
+--- !u!114 &717862197
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717862187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96180716b25da25449dd0a2f5c78be41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  _zkill: -999
 --- !u!1 &1156292625
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,6 +671,7 @@ GameObject:
   - component: {fileID: 2077169261}
   - component: {fileID: 2077169260}
   - component: {fileID: 2077169262}
+  - component: {fileID: 2077169263}
   m_Layer: 0
   m_Name: Capsule (1)
   m_TagString: Untagged
@@ -740,3 +781,17 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 2}
   m_Direction: 0
+--- !u!114 &2077169263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2077169259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96180716b25da25449dd0a2f5c78be41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHealth: 100
+  _zkill: -999
