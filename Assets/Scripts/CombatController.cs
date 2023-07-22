@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour
@@ -31,29 +32,43 @@ public class CombatController : MonoBehaviour
     [SerializeField]
     private GameObject DSpecialAttack;
 
+    [SerializeField]
+    private float attackOffset = 5f;
+
     private void Update()
     {
         float forward = Input.GetAxisRaw(HorizontalAxis);
         float down = Input.GetAxisRaw(VerticalAxis);
 
-        // TODO : upgrade (use array)
+        // TODO : upgrade (use array to store the gameobjects)
         if (Input.GetButtonDown(SimpleAttackButton))
         {
+            GameObject attack = null;
             if (down < 0)
-                Instantiate(DSimpleAttack);
+                attack = Instantiate(DSimpleAttack, transform);
             else if (Mathf.Abs(forward) > 0)
-                Instantiate(FSimpleAttack);
+                attack = Instantiate(FSimpleAttack, transform);
             else
-                Instantiate(NSimpleAttack);
+                attack = Instantiate(NSimpleAttack, transform);
+
+            attack.transform.position = new Vector3(attack.transform.position.x + attackOffset,
+                attack.transform.position.y,
+                0f);
         }
-        if (Input.GetButtonDown(SpecialAttackButton))
+        else if (Input.GetButtonDown(SpecialAttackButton))
         {
+            GameObject attack = null;
             if (down < 0)
-                Instantiate(DSpecialAttack);
+                attack = Instantiate(DSpecialAttack, transform);
             else if (Mathf.Abs(forward) > 0)
-                Instantiate(FSpecialAttack);
+                attack = Instantiate(FSpecialAttack, transform);
             else
-                Instantiate(NSpecialAttack);
+                attack = Instantiate(NSpecialAttack, transform);
+
+            attack.transform.position = new Vector3(attack.transform.position.x + attackOffset,
+                attack.transform.position.y,
+                0f);
         }
+        // TODO : use animation with already assigned trigger
     }
 }

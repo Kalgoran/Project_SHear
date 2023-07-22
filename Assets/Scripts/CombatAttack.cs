@@ -30,8 +30,11 @@ public class CombatAttack : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        IDamageable target;
-        if (TryGetComponent<IDamageable>(out target))
+        Debug.Log(collision.name);
+
+        HealthComponent target;
+        Debug.Log(collision.TryGetComponent<HealthComponent>(out target));
+        if (collision.TryGetComponent<HealthComponent>(out target))
         {
             target.TakeDamage(attackDamage);
             Destroy(gameObject);
