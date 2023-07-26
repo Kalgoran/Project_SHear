@@ -11,9 +11,13 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField]
     private float jumpForce = 10f;
     [SerializeField]
-    private float gravity = 4f;
+    private float gravity = 5f;
     [SerializeField]
-    private float dashForce = 20f;
+    private float dashForce = 30f;
+    [SerializeField]
+    private float smoothTime = 0.8f;
+    [SerializeField]
+    private float stopThresh = 0.3f;
 
     private Rigidbody2D rb;
     private CapsuleCollider2D cl;
@@ -30,15 +34,11 @@ public class PlayerController2D : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        //- dash
-
         float vx;
         float vy;
 
@@ -50,9 +50,8 @@ public class PlayerController2D : MonoBehaviour
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // add vertical force
         }
 
-
         //s'accroupir
-        transform.localScale = new Vector3(1, 1f-Mathf.Abs(Input.GetAxis("Vertical"))/2f, 1);
+        transform.localScale = new Vector3(1, 1f-Mathf.Abs(Input.GetAxis("Crouch"))/2f, 1);
 
         //faster fall 
         vy = rb.velocity.y;
@@ -68,9 +67,9 @@ public class PlayerController2D : MonoBehaviour
         //right and left
         if (a)
         {
-            if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.5)
+            if (Mathf.Abs(Input.GetAxis("Horizontal")) > stopThresh)
             {
-                vx = Mathf.SmoothDamp(rb.velocity.x, Input.GetAxis("Horizontal") * speed, ref vel, 0.5f);
+                vx = Mathf.SmoothDamp(rb.velocity.x, Input.GetAxisRaw("Horizontal") * speed, ref vel, smoothTime);
             } else
             {
                 vx = Input.GetAxis("Horizontal") * speed; //faster stop
@@ -78,7 +77,7 @@ public class PlayerController2D : MonoBehaviour
         }
         else
         {
-            vx = rb.velocity.x + 0.004f * Input.GetAxis("Horizontal") * speed;  //restrict air movements
+            vx = rb.velocity.x + 0.001f * Input.GetAxis("Horizontal") * speed;  //restrict air movements
         }
         vx = Mathf.Clamp(vx, -speed, speed);
         rb.velocity = new Vector2(vx, vy);
@@ -86,19 +85,8 @@ public class PlayerController2D : MonoBehaviour
         //dash
         if (Input.GetButtonDown("Fire3"))
         {
-            print(Vector2.right * GetDirection() * dashForce);
-            rb.AddForce(Vector2.right * GetDirection() * dashForce, ForceMode2D.Impulse); // add horizontal force 
-        }
-    }
-
-    float GetDirection()
-    {
-        if (Input.GetAxis("Horizontal") != 0)
-        {
-            return Input.GetAxis("Horizontal") / Mathf.Abs(Input.GetAxis("Horizontal"));
-        } else
-        {
-            return 0;
+            print(Vector2.right * Input.GetAxisRaw("Horizontal") * dashForce);
+            rb.AddForce(Vector2.right * Input.GetAxisRaw("Horizontal") * dashForce, ForceMode2D.Impulse); // add horizontal force 
         }
     }
 

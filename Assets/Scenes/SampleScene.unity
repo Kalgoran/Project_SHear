@@ -450,8 +450,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 25
   jumpForce: 10
-  gravity: 4
-  dashForce: 20
+  gravity: 6
+  dashForce: 30
+  smoothTime: 0.8
+  stopThresh: 0.2
 --- !u!70 &717862194
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
