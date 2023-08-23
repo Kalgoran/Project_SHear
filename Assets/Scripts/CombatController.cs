@@ -72,9 +72,12 @@ public class CombatController : MonoBehaviour
         animator.enabled = true;
         playerController.disable();
         animator.Play(attackName);
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName(attackName))
+
+        // application needs to be 60 fps limited
+        if (Application.targetFrameRate > 0)
         {
-            animator.enabled = true;
+            for (int i = 0; i < animFrameDuration + 1; ++i)
+                yield return new WaitForEndOfFrame();
 
             animator.enabled = false;
             playerController.enable();
