@@ -163,9 +163,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f5a930e7b1fcc544954a20239c5f129, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerIndex: 0
+  VerticalAxis: Vertical
+  HorizontalAxis: Horizontal
+  JumpButton: Jump
+  CrouchButton: Crouch
+  DashButton: Fire3
   speed: 25
-  jumpForce: 10
-  gravity: 6
+  jumpStartupSpeed: 20
+  jumpHeight: 4
+  jumpSpeedDecay: 0.1
+  jumpGravityMultiplier: 1.005
   dashForce: 30
   smoothTime: 0.8
   stopThresh: 0.2
