@@ -1,11 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 [RequireComponent(typeof(CapsuleCollider2D))]
 public class PlayerController2D : MonoBehaviour
 {
+    public int playerIndex = 0;
+
+
+    [SerializeField]
+    private string VerticalAxis = "Vertical";
+    [SerializeField]
+    private string HorizontalAxis = "Horizontal";
+    [SerializeField]
+    private string JumpButton = "Jump";
+    [SerializeField]
+    private string CrouchButton = "Crouch";
+    [SerializeField]
+    private string DashButton = "Dash";
+
+
     [SerializeField]
     private float speed = 25f;
 
@@ -54,7 +67,7 @@ public class PlayerController2D : MonoBehaviour
 
         // jump
         // upward acceleration
-        if (bEnable && bOnGround && Input.GetButtonDown("Jump"))
+        if (bEnable && bOnGround && Input.GetButtonDown(playerIndex + JumpButton))
         {
             height = transform.position.y;
             rb.AddForce(Vector2.up * jumpStartupSpeed, ForceMode2D.Impulse);
@@ -71,7 +84,7 @@ public class PlayerController2D : MonoBehaviour
 
 
         // crouch
-        transform.localScale = new Vector3(1, 1f - Mathf.Abs(Input.GetAxis("Crouch")) / 2f, 1);
+        transform.localScale = new Vector3(1, 1f - Mathf.Abs(Input.GetAxis(playerIndex + CrouchButton)) / 2f, 1);
 
         // right and left
         if (bOnGround)
@@ -81,23 +94,23 @@ public class PlayerController2D : MonoBehaviour
                 vx = 0;
             }else
             {
-                if (Input.GetAxisRaw("Horizontal") != 0)
-                    facing = Input.GetAxisRaw("Horizontal");
-                if (Mathf.Abs(Input.GetAxis("Horizontal")) > stopThresh)
+                if (Input.GetAxisRaw(playerIndex + HorizontalAxis) != 0)
+                    facing = Input.GetAxisRaw(playerIndex + HorizontalAxis);
+                if (Mathf.Abs(Input.GetAxis(playerIndex + HorizontalAxis)) > stopThresh)
                     vx = Mathf.SmoothDamp(rb.velocity.x, facing * speed, ref vel, smoothTime);
                 else
-                    vx = Input.GetAxis("Horizontal") * speed; //faster stop
+                    vx = Input.GetAxis(playerIndex + HorizontalAxis) * speed; //faster stop
             }
         }
         else
         {
-            vx = rb.velocity.x + 0.001f * Input.GetAxis("Horizontal") * speed;  //restrict air movements
+            vx = rb.velocity.x + 0.001f * Input.GetAxis(playerIndex + HorizontalAxis) * speed;  //restrict air movements
         }
         vx = Mathf.Clamp(vx, -speed, speed);
         rb.velocity = new Vector2(vx, vy);
 
         // dash
-        if (bEnable && Input.GetButtonDown("Fire3"))
+        if (bEnable && Input.GetButtonDown(playerIndex + DashButton))
             rb.AddForce(Vector2.right * facing * dashForce, ForceMode2D.Impulse); // add horizontal force 
 
 

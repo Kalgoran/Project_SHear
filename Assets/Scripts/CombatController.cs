@@ -5,6 +5,9 @@ using System.Collections;
 [RequireComponent(typeof(Animator))]
 public class CombatController : MonoBehaviour
 {
+    public int playerIndex = 0;
+
+
     public PlayerController2D playerController;
     private Animator animator;
 
@@ -69,12 +72,9 @@ public class CombatController : MonoBehaviour
         animator.enabled = true;
         playerController.disable();
         animator.Play(attackName);
-
-        // application needs to be 60 fps limited
-        if (Application.targetFrameRate > 0)
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName(attackName))
         {
-            for (int i = 0; i < animFrameDuration + 1; ++i)
-                yield return new WaitForEndOfFrame();
+            animator.enabled = true;
 
             animator.enabled = false;
             playerController.enable();
@@ -88,11 +88,11 @@ public class CombatController : MonoBehaviour
         if (InAnimation())
             return;
 
-        float forward = Input.GetAxisRaw(HorizontalAxis);
-        float down = Input.GetAxisRaw(VerticalAxis);
+        float forward = Input.GetAxisRaw(playerIndex + HorizontalAxis);
+        float down = Input.GetAxisRaw(playerIndex + VerticalAxis);
 
         // TODO : upgrade (use array to store the gameobjects)
-        if (Input.GetButtonDown(SimpleAttackButton))
+        if (Input.GetButtonDown(playerIndex + SimpleAttackButton))
         {
             if (down < 0)
                 StartCoroutine(StartAttackAnim(DSimpleAttack, DSimpleFrameDuration));
@@ -101,7 +101,7 @@ public class CombatController : MonoBehaviour
             else
                 StartCoroutine(StartAttackAnim(NSimpleAttack, NSimpleFrameDuration));
         }
-        else if (Input.GetButtonDown(SpecialAttackButton))
+        else if (Input.GetButtonDown(playerIndex + SpecialAttackButton))
         {
             if (down < 0)
                 StartCoroutine(StartAttackAnim(DSpecialAttack, DSpecialFrameDuration));
