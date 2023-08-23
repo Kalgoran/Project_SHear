@@ -26,17 +26,29 @@ public class CombatController : MonoBehaviour
     // forward
     // down
     [SerializeField]
-    private GameObject NSimpleAttack;
+    private string NSimpleAttack = "NSimpleAttack";
     [SerializeField]
-    private GameObject FSimpleAttack;
+    private int NSimpleFrameDuration = 60;
     [SerializeField]
-    private GameObject DSimpleAttack;
+    private string FSimpleAttack = "FSimpleAttack";
     [SerializeField]
-    private GameObject NSpecialAttack;
+    private int FSimpleFrameDuration = 60;
     [SerializeField]
-    private GameObject FSpecialAttack;
+    private string DSimpleAttack = "DSimpleAttack";
     [SerializeField]
-    private GameObject DSpecialAttack;
+    private int DSimpleFrameDuration = 60;
+    [SerializeField]
+    private string NSpecialAttack = "NSpecialAttack";
+    [SerializeField]
+    private int NSpecialFrameDuration = 60;
+    [SerializeField]
+    private string FSpecialAttack = "FSpecialAttack";
+    [SerializeField]
+    private int FSpecialFrameDuration = 60;
+    [SerializeField]
+    private string DSpecialAttack = "DSpecialAttack";
+    [SerializeField]
+    private int DSpecialFrameDuration = 60;
 
     [SerializeField]
     private float attackOffset = 1f;
@@ -81,23 +93,21 @@ public class CombatController : MonoBehaviour
         // TODO : upgrade (use array to store the gameobjects)
         if (Input.GetButtonDown(SimpleAttackButton))
         {
-            GameObject attack = null;
             if (down < 0)
-                attack = Instantiate(DSimpleAttack, transform);
+                StartCoroutine(StartAttackAnim("DSimpleAttack", DSimpleFrameDuration));
             else if (Mathf.Abs(forward) > 0)
-                attack = Instantiate(FSimpleAttack, transform);
+                StartCoroutine(StartAttackAnim("FSimpleAttack", FSimpleFrameDuration));
             else
-                StartCoroutine(StartAttackAnim("NSimpleAttack", 60));
+                StartCoroutine(StartAttackAnim("NSimpleAttack", NSimpleFrameDuration));
         }
         else if (Input.GetButtonDown(SpecialAttackButton))
         {
-            GameObject attack = null;
             if (down < 0)
-                attack = Instantiate(DSpecialAttack, transform);
+                StartCoroutine(StartAttackAnim("DSpecialAttack", DSpecialFrameDuration));
             else if (Mathf.Abs(forward) > 0)
-                attack = Instantiate(FSpecialAttack, transform);
+                StartCoroutine(StartAttackAnim("FSpecialAttack", FSpecialFrameDuration));
             else
-                attack = Instantiate(NSpecialAttack, transform);
+                StartCoroutine(StartAttackAnim("NSpecialAttack", NSpecialFrameDuration));
         }
     }
 
