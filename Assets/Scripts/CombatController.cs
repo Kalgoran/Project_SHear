@@ -1,9 +1,12 @@
 using UnityEngine;
+using System.Collections;
 
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Animator))]
 public class CombatController : MonoBehaviour
 {
     public PlayerController2D playerController;
+    private Animator animator;
 
 
     [SerializeField]
@@ -39,8 +42,38 @@ public class CombatController : MonoBehaviour
     private float attackOffset = 1f;
 
 
+    private void Awake()
+    {
+        GetComponent<BoxCollider2D>().isTrigger = true;
+    }
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+        animator.enabled = false;
+    }
+
+    IEnumerator StartAttackAnim(string attackName, int animFrameDuration)
+    {
+        animator.enabled = true;
+        animator.Play(attackName);
+
+        // application needs to be 60 fps limited
+        if (Application.targetFrameRate > 0)
+        {
+            for (int i = 0; i < animFrameDuration + 1; ++i)
+                yield return new WaitForEndOfFrame();
+
+            animator.enabled = false;
+        }
+
+        yield return null;
+    }
+
     private void Update()
     {
+        if (InAnimation())
+            return;
+
         float facing = playerController.GetFacing();
         float forward = Input.GetAxisRaw(HorizontalAxis);
         float down = Input.GetAxisRaw(VerticalAxis);
@@ -54,14 +87,7 @@ public class CombatController : MonoBehaviour
             else if (Mathf.Abs(forward) > 0)
                 attack = Instantiate(FSimpleAttack, transform);
             else
-                attack = Instantiate(NSimpleAttack, transform);
-
-            //attack.transform.position = new Vector3(facing * (attack.transform.position.x + attackOffset),
-            //    attack.transform.position.y,
-            //    0f); 
-            attack.transform.position = new Vector3(transform.position.x + facing * attackOffset,
-                transform.position.y,
-                0f); //the referential for attack.transform has to be the gameobject, not the attack object
+                StartCoroutine(StartAttackAnim("NSimpleAttack", 60));
         }
         else if (Input.GetButtonDown(SpecialAttackButton))
         {
@@ -72,11 +98,18 @@ public class CombatController : MonoBehaviour
                 attack = Instantiate(FSpecialAttack, transform);
             else
                 attack = Instantiate(NSpecialAttack, transform);
-
-            attack.transform.position = new Vector3(transform.position.x + facing * attackOffset,
-                transform.position.y,
-                0f);
         }
-        // TODO : use animation with already assigned trigger
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log(collision.name);
+    }
+
+    public void ResetAnimator()
+    {
+        animator.enabled = false;
+    }
+
+    public bool InAnimation() => animator.enabled;
 }
