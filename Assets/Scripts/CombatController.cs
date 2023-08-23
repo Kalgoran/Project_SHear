@@ -94,20 +94,20 @@ public class CombatController : MonoBehaviour
         if (Input.GetButtonDown(SimpleAttackButton))
         {
             if (down < 0)
-                StartCoroutine(StartAttackAnim("DSimpleAttack", DSimpleFrameDuration));
+                StartCoroutine(StartAttackAnim(DSimpleAttack, DSimpleFrameDuration));
             else if (Mathf.Abs(forward) > 0)
-                StartCoroutine(StartAttackAnim("FSimpleAttack", FSimpleFrameDuration));
+                StartCoroutine(StartAttackAnim(FSimpleAttack, FSimpleFrameDuration));
             else
-                StartCoroutine(StartAttackAnim("NSimpleAttack", NSimpleFrameDuration));
+                StartCoroutine(StartAttackAnim(NSimpleAttack, NSimpleFrameDuration));
         }
         else if (Input.GetButtonDown(SpecialAttackButton))
         {
             if (down < 0)
-                StartCoroutine(StartAttackAnim("DSpecialAttack", DSpecialFrameDuration));
+                StartCoroutine(StartAttackAnim(DSpecialAttack, DSpecialFrameDuration));
             else if (Mathf.Abs(forward) > 0)
-                StartCoroutine(StartAttackAnim("FSpecialAttack", FSpecialFrameDuration));
+                StartCoroutine(StartAttackAnim(FSpecialAttack, FSpecialFrameDuration));
             else
-                StartCoroutine(StartAttackAnim("NSpecialAttack", NSpecialFrameDuration));
+                StartCoroutine(StartAttackAnim(NSpecialAttack, NSpecialFrameDuration));
         }
     }
 
