@@ -94,6 +94,11 @@ public class PlayerController2D : MonoBehaviour
         {
             rb.AddForce(Vector2.right * facing * dashForce, ForceMode2D.Impulse); // add horizontal force 
         }
+
+        //facing
+        transform.localScale = new Vector3(transform.localScale.x * facing,
+            transform.localScale.y,
+            transform.localScale.z);
     }
 
     bool DetectGround()

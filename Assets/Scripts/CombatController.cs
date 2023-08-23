@@ -86,7 +86,6 @@ public class CombatController : MonoBehaviour
         if (InAnimation())
             return;
 
-        float facing = playerController.GetFacing();
         float forward = Input.GetAxisRaw(HorizontalAxis);
         float down = Input.GetAxisRaw(VerticalAxis);
 
