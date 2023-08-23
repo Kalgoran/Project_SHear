@@ -1,8 +1,11 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider2D))]
 public class CombatController : MonoBehaviour
 {
+    public PlayerController2D playerController;
+
+
     [SerializeField]
     private string SimpleAttackButton = "Attack0";
     [SerializeField]
@@ -33,18 +36,12 @@ public class CombatController : MonoBehaviour
     private GameObject DSpecialAttack;
 
     [SerializeField]
-    private float attackOffset = 5f;
+    private float attackOffset = 1f;
 
-    private PlayerController2D P;
-
-    void Start()
-    {
-        P = GetComponent<PlayerController2D>();
-    }
 
     private void Update()
     {
-        float facing = P.GetFacing();
+        float facing = playerController.GetFacing();
         float forward = Input.GetAxisRaw(HorizontalAxis);
         float down = Input.GetAxisRaw(VerticalAxis);
 
