@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CombatController : MonoBehaviour
@@ -32,18 +33,7 @@ public class CombatController : MonoBehaviour
     private GameObject DSpecialAttack;
 
     [SerializeField]
-    private float attackOffset = 1f;
-
-    [SerializeField]
-    private bool bStartInverted = false;
-    private float inverted = 1.0f;
-
-
-    private void Start()
-    {
-        if (bStartInverted)
-            inverted *= -1.0f;
-    }
+    private float attackOffset = 5f;
 
     private void Update()
     {
@@ -61,7 +51,7 @@ public class CombatController : MonoBehaviour
             else
                 attack = Instantiate(NSimpleAttack, transform);
 
-            attack.transform.position = new Vector3(attack.transform.position.x + (inverted * attackOffset),
+            attack.transform.position = new Vector3(attack.transform.position.x + attackOffset,
                 attack.transform.position.y,
                 0f);
         }
@@ -75,13 +65,10 @@ public class CombatController : MonoBehaviour
             else
                 attack = Instantiate(NSpecialAttack, transform);
 
-            attack.transform.position = new Vector3(attack.transform.position.x + (inverted * attackOffset),
+            attack.transform.position = new Vector3(attack.transform.position.x + attackOffset,
                 attack.transform.position.y,
                 0f);
         }
         // TODO : use animation with already assigned trigger
-
-        if (forward != 0f)
-            inverted = forward;
     }
 }
