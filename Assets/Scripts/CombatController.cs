@@ -35,8 +35,16 @@ public class CombatController : MonoBehaviour
     [SerializeField]
     private float attackOffset = 5f;
 
+    private PlayerController2D P;
+
+    void Start()
+    {
+        P = GetComponent<PlayerController2D>();
+    }
+
     private void Update()
     {
+        float facing = P.GetFacing();
         float forward = Input.GetAxisRaw(HorizontalAxis);
         float down = Input.GetAxisRaw(VerticalAxis);
 
@@ -51,9 +59,12 @@ public class CombatController : MonoBehaviour
             else
                 attack = Instantiate(NSimpleAttack, transform);
 
-            attack.transform.position = new Vector3(attack.transform.position.x + attackOffset,
-                attack.transform.position.y,
-                0f);
+            //attack.transform.position = new Vector3(facing * (attack.transform.position.x + attackOffset),
+            //    attack.transform.position.y,
+            //    0f); 
+            attack.transform.position = new Vector3(transform.position.x + facing * attackOffset,
+                transform.position.y,
+                0f); //the referential for attack.transform has to be the gameobject, not the attack object
         }
         else if (Input.GetButtonDown(SpecialAttackButton))
         {
@@ -65,8 +76,8 @@ public class CombatController : MonoBehaviour
             else
                 attack = Instantiate(NSpecialAttack, transform);
 
-            attack.transform.position = new Vector3(attack.transform.position.x + attackOffset,
-                attack.transform.position.y,
+            attack.transform.position = new Vector3(transform.position.x + facing * attackOffset,
+                transform.position.y,
                 0f);
         }
         // TODO : use animation with already assigned trigger

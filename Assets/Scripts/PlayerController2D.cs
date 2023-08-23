@@ -9,15 +9,17 @@ public class PlayerController2D : MonoBehaviour
     [SerializeField]
     private float speed = 25f;
     [SerializeField]
-    private float jumpForce = 10f;
+    private float jumpForce = 25f;
     [SerializeField]
-    private float gravity = 5f;
+    private float gravity = 3f;
     [SerializeField]
     private float dashForce = 30f;
     [SerializeField]
     private float smoothTime = 0.8f;
     [SerializeField]
     private float stopThresh = 0.3f;
+
+    private float facing = 1;
 
     private Rigidbody2D rb;
     private CapsuleCollider2D cl;
@@ -50,26 +52,31 @@ public class PlayerController2D : MonoBehaviour
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse); // add vertical force
         }
 
-        //s'accroupir
-        transform.localScale = new Vector3(1, 1f-Mathf.Abs(Input.GetAxis("Crouch"))/2f, 1);
-
         //faster fall 
         vy = rb.velocity.y;
-        if (rb.velocity.y <0)
+        if (rb.velocity.y < 0)
         {
             rb.gravityScale = gravity;
-        } else
+        }
+        else
         {
             rb.gravityScale = 1f;
         }
         Mathf.Clamp(vy, -15, speed);
 
+        //s'accroupir
+        transform.localScale = new Vector3(1, 1f-Mathf.Abs(Input.GetAxis("Crouch"))/2f, 1);
+
         //right and left
         if (a)
         {
-            if (Mathf.Abs(Input.GetAxis("Horizontal")) > stopThresh)
+            if (Input.GetAxisRaw("Horizontal") != 0)
             {
-                vx = Mathf.SmoothDamp(rb.velocity.x, Input.GetAxisRaw("Horizontal") * speed, ref vel, smoothTime);
+                facing = Input.GetAxisRaw("Horizontal");
+            }
+            if (Mathf.Abs(Input.GetAxis("Horizontal")) > stopThresh)
+            {             
+                vx = Mathf.SmoothDamp(rb.velocity.x, facing * speed, ref vel, smoothTime);
             } else
             {
                 vx = Input.GetAxis("Horizontal") * speed; //faster stop
@@ -85,13 +92,17 @@ public class PlayerController2D : MonoBehaviour
         //dash
         if (Input.GetButtonDown("Fire3"))
         {
-            print(Vector2.right * Input.GetAxisRaw("Horizontal") * dashForce);
-            rb.AddForce(Vector2.right * Input.GetAxisRaw("Horizontal") * dashForce, ForceMode2D.Impulse); // add horizontal force 
+            rb.AddForce(Vector2.right * facing * dashForce, ForceMode2D.Impulse); // add horizontal force 
         }
     }
 
     bool DetectGround()
     {
         return Physics2D.CircleCast(cl.bounds.center, cl.bounds.size.x/2, Vector2.down, cl.bounds.size.y/2);
+    }
+
+    public float GetFacing()
+    {
+        return facing;
     }
 }
