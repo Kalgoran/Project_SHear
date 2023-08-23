@@ -67,6 +67,7 @@ public class CombatController : MonoBehaviour
     IEnumerator StartAttackAnim(string attackName, int animFrameDuration)
     {
         animator.enabled = true;
+        playerController.disable();
         animator.Play(attackName);
 
         // application needs to be 60 fps limited
@@ -76,8 +77,9 @@ public class CombatController : MonoBehaviour
                 yield return new WaitForEndOfFrame();
 
             animator.enabled = false;
+            playerController.enable();
         }
-
+                
         yield return null;
     }
 
@@ -118,6 +120,7 @@ public class CombatController : MonoBehaviour
     public void ResetAnimator()
     {
         animator.enabled = false;
+        playerController.enable();
     }
 
     public bool InAnimation() => animator.enabled;

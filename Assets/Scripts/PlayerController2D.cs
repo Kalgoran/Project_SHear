@@ -27,6 +27,8 @@ public class PlayerController2D : MonoBehaviour
 
     private float facing = 1f;
 
+    private bool bEnable = true;
+
     private Rigidbody2D rb;
     private CapsuleCollider2D cl;
 
@@ -52,7 +54,7 @@ public class PlayerController2D : MonoBehaviour
 
         // jump
         // upward acceleration
-        if (bOnGround && Input.GetButtonDown("Jump"))
+        if (bEnable && bOnGround && Input.GetButtonDown("Jump"))
         {
             height = transform.position.y;
             rb.AddForce(Vector2.up * jumpStartupSpeed, ForceMode2D.Impulse);
@@ -71,16 +73,21 @@ public class PlayerController2D : MonoBehaviour
         // crouch
         transform.localScale = new Vector3(1, 1f - Mathf.Abs(Input.GetAxis("Crouch")) / 2f, 1);
 
-
         // right and left
         if (bOnGround)
         {
-            if (Input.GetAxisRaw("Horizontal") != 0)
-                facing = Input.GetAxisRaw("Horizontal");
-            if (Mathf.Abs(Input.GetAxis("Horizontal")) > stopThresh)
-                vx = Mathf.SmoothDamp(rb.velocity.x, facing * speed, ref vel, smoothTime);
-            else
-                vx = Input.GetAxis("Horizontal") * speed; //faster stop
+            if (!bEnable)
+            {
+                vx = 0;
+            }else
+            {
+                if (Input.GetAxisRaw("Horizontal") != 0)
+                    facing = Input.GetAxisRaw("Horizontal");
+                if (Mathf.Abs(Input.GetAxis("Horizontal")) > stopThresh)
+                    vx = Mathf.SmoothDamp(rb.velocity.x, facing * speed, ref vel, smoothTime);
+                else
+                    vx = Input.GetAxis("Horizontal") * speed; //faster stop
+            }
         }
         else
         {
@@ -89,11 +96,10 @@ public class PlayerController2D : MonoBehaviour
         vx = Mathf.Clamp(vx, -speed, speed);
         rb.velocity = new Vector2(vx, vy);
 
-
         // dash
-        if (Input.GetButtonDown("Fire3"))
+        if (bEnable && Input.GetButtonDown("Fire3"))
             rb.AddForce(Vector2.right * facing * dashForce, ForceMode2D.Impulse); // add horizontal force 
-        
+
 
         //facing
         transform.localScale = new Vector3(transform.localScale.x * facing,
@@ -109,5 +115,14 @@ public class PlayerController2D : MonoBehaviour
     public float GetFacing()
     {
         return facing;
+    }
+
+    public void disable()
+    {
+        bEnable = false;
+    }
+    public void enable()
+    {
+        bEnable = true;
     }
 }
